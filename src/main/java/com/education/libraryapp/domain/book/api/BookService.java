@@ -22,4 +22,7 @@ public interface BookService {
     List<BookDto> getBooksStartingWith(String prefix);
 
     Page<BookDto> getBooksCreatedAfter(LocalDateTime date, Pageable pageable);
+
+    List<PublisherWithBooksDto> getFirstTwoPublishersWithBooks();
+
 }

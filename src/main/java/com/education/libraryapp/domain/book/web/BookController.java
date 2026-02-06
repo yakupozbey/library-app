@@ -2,6 +2,7 @@ package com.education.libraryapp.domain.book.web;
 
 import com.education.libraryapp.domain.book.api.BookMapper;
 import com.education.libraryapp.domain.book.api.BookService;
+import com.education.libraryapp.domain.book.api.PublisherWithBooksDto;
 import com.education.libraryapp.integration.googlebooks.api.GoogleBooksService;
 import com.education.libraryapp.integration.googlebooks.web.GoogleBooksResponse;
 import lombok.RequiredArgsConstructor;
@@ -90,4 +91,10 @@ public class BookController {
     public List<GoogleBooksResponse> searchFromGoogle(@RequestParam String title) {
         return googleBooksService.searchByTitle(title);
     }
+
+    @GetMapping("/publishers/first-two-with-books")
+    public List<PublisherWithBooksDto> getFirstTwoPublishersWithBooks() {
+        return service.getFirstTwoPublishersWithBooks();
+    }
+
 }

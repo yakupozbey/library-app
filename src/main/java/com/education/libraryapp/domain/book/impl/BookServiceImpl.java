@@ -6,12 +6,14 @@ import com.education.libraryapp.domain.author.impl.Author;
 import com.education.libraryapp.domain.book.api.BookDto;
 import com.education.libraryapp.domain.book.api.BookMapper;
 import com.education.libraryapp.domain.book.api.BookService;
+import com.education.libraryapp.domain.book.api.PublisherWithBooksDto;
 import com.education.libraryapp.domain.publisher.api.PublisherDto;
 import com.education.libraryapp.domain.publisher.api.PublisherService;
 import com.education.libraryapp.domain.publisher.impl.Publisher;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -153,6 +155,39 @@ public class BookServiceImpl implements BookService {
                     AuthorDto authorDto = authorService.getAuthorByBookId(book.getId());
                     return BookMapper.entityToDto(book, publisherDto, authorDto);
                 });
+    }
+
+    @Override
+    public List<PublisherWithBooksDto> getFirstTwoPublishersWithBooks() {
+        Page<PublisherDto> publishers =
+                publisherService.getAllPublishers(PageRequest.of(0, 2));
+
+        return publishers.getContent()
+                .stream()
+                .map(publisherDto -> {
+
+                    List<BookDto> books = repository
+                            .findByPublisherId(publisherDto.getId())
+                            .stream()
+                            .map(book -> {
+                                AuthorDto authorDto =
+                                        authorService.getAuthorByBookId(book.getId());
+
+                                return BookMapper.entityToDto(
+                                        book,
+                                        publisherDto,
+                                        authorDto
+                                );
+                            })
+                            .toList();
+
+                    return PublisherWithBooksDto.builder()
+                            .publisherId(publisherDto.getId())
+                            .publisherName(publisherDto.getPublisherName())
+                            .books(books)
+                            .build();
+                })
+                .toList();
     }
 
 }

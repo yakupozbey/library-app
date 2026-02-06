@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -14,4 +15,7 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
 
     @Query("select b from Book b where b.created > :date")
     Page<Book> findBooksCreatedAfter(@Param("date") LocalDateTime date, Pageable pageable);
+
+    List<Book> findByPublisherId(UUID publisherId);
+
 }
