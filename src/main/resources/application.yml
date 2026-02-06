@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: libraryapp
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/libraryapp
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+  main:
+    allow-circular-references: true

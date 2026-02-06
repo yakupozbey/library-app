@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: postgres_libraryapp
+    image: postgres:16
+    restart: always
+    command: postgres -c 'max_connections=200'
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: libraryapp
+    networks:
+      - spring-microservices
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  libraryapp:
+    build: .
+    image: libraryapp
+    container_name: libraryapp-be
+    restart: always
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/libraryapp?currentSchema=public
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "9091:8080"
+    networks:
+      - spring-microservices
+
+networks:
+  spring-microservices:
+
+volumes:
+  pgdata:
