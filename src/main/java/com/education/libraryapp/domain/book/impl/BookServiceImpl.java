@@ -135,7 +135,7 @@ public class BookServiceImpl implements BookService {
     }
 
     private BookDto buildResponse(Book savedBook, Publisher publisher) {
-        AuthorDto authorDto = authorService.getAuthorById(savedBook.getId());
+        AuthorDto authorDto = authorService.findAuthorByBookId(savedBook.getId());
         PublisherDto publisherDto = publisherService.getPublisherById(publisher.getId());
         return BookMapper.entityToDto(savedBook, publisherDto, authorDto);
     }

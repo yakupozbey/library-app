@@ -79,7 +79,7 @@ class BookServiceImplTest {
                 .authorNameSurname(authorName)
                 .build();
 
-        when(authorService.getAuthorById(savedBookId)).thenReturn(authorDto);
+        when(authorService.findAuthorByBookId(savedBookId)).thenReturn(authorDto);
 
         PublisherDto publisherDto = PublisherDto.builder()
                 .id(publisherId)
@@ -114,7 +114,7 @@ class BookServiceImplTest {
         verify(authorService).create(authorName, savedBookId);
 
         // response için gerekli servis çağrıları
-        verify(authorService).getAuthorById(savedBookId);
+        verify(authorService).findAuthorByBookId(savedBookId);
         verify(publisherService).getPublisherById(publisherId);
 
         // createBook içinde 2 kere save var (biri Book, biri savedBook tekrar)

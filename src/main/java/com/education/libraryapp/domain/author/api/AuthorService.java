@@ -14,7 +14,7 @@ public interface AuthorService {
 
     AuthorDto updateAuthor(UUID id, AuthorDto dto);
 
-    AuthorDto getAuthorById(UUID id);
+    AuthorDto findAuthorByBookId(UUID bookId);
 
     AuthorDto getAuthorByBookId(UUID bookId);
 

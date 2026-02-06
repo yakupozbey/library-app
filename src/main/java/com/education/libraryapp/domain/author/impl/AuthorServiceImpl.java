@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -52,13 +53,12 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional(readOnly = true)
-    public AuthorDto getAuthorById(UUID id) {
-        Author author = repository.findByBookId(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        Author.class.getSimpleName() + " not found with id: " + id
-                ));
-
-        return AuthorMapper.toDto(author);
+    public AuthorDto findAuthorByBookId(UUID bookId) {
+        List<Author> authors = repository.findAllByBookId(bookId);
+        if (authors.isEmpty()) {
+            throw new EntityNotFoundException("Author not found with bookId: " + bookId);
+        }
+        return AuthorMapper.toDto(authors.get(0));
     }
 
     @Override
